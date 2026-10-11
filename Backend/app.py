@@ -8,8 +8,8 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-FRONTEND_DIR = Path(__file__).resolve().parent.parent / "Frontend"
-app = Flask(__name__, static_folder=str(FRONTEND_DIR), static_url_path="")
+PUBLIC_DIR = Path(__file__).resolve().parent.parent / "public"
+app = Flask(__name__, static_folder=None)
 CORS(app)
 
 load_dotenv(Path(__file__).with_name(".env"))
@@ -27,7 +27,12 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 
 @app.route("/")
 def index():
-    return send_from_directory(FRONTEND_DIR, "index.html")
+    return send_from_directory(PUBLIC_DIR, "index.html")
+
+
+@app.route("/<path:filename>")
+def public_file(filename):
+    return send_from_directory(PUBLIC_DIR, filename)
 
 PROMPTS = {
     "Summary": """
