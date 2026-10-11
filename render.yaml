@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: travel-guide
+    runtime: python
+    buildCommand: pip install -r Backend/requirements.txt
+    startCommand: cd Backend && gunicorn app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: MURF_API_KEY
+        sync: false
